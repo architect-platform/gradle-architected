@@ -3,6 +3,6 @@ package io.github.architectplatform.plugins.gradlearchitected.application.execut
 
 class GradleExecutor  {
 	fun execute(path: String, vararg args: String) {
-		println("Executing Gradle phases: ${args.toList().joinToString(" ")} in $path")
+		println("Executing Gradle command: ${args.toList().joinToString(" ")} in $path")
 	}
 }

@@ -7,7 +7,7 @@ import io.github.architectplatform.plugins.gradlearchitected.application.executo
 class GradleBuildTask() : BuildTask() {
 
 	override val name: String = "gradle-build-task"
-	val gradleExecutor = GradleExecutor()
+	private val gradleExecutor = GradleExecutor()
 
 	override fun executeTask(path: String): BuildTaskResult {
 		println("Executing gradle build for project in path: $path")
