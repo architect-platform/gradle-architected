@@ -1,0 +1,76 @@
+package io.github.architectplatform.plugins.gradlearchitected
+
+import io.github.architectplatform.api.assets.code.CodePhaseTaskImpl
+import io.github.architectplatform.api.assets.code.CodePhases
+import io.github.architectplatform.api.plugins.ArchitectPlugin
+import io.github.architectplatform.api.project.ProjectContext
+import io.github.architectplatform.api.tasks.TaskRegistry
+import io.github.architectplatform.api.tasks.TaskResult
+
+
+class GradlePlugin : ArchitectPlugin {
+	override val id = "gradle-plugin"
+	override fun register(registry: TaskRegistry) {
+		println("Registering GradlePlugin with ID: $id")
+		registry.add(
+			CodePhaseTaskImpl(
+				id = "gradle-build-task",
+				phase = CodePhases.BUILD,
+				task = ::buildTask,
+			)
+		)
+		registry.add(
+			CodePhaseTaskImpl(
+				id = "gradle-test-task",
+				phase = CodePhases.TEST,
+				task = ::testTask,
+			)
+		)
+		registry.add(
+			CodePhaseTaskImpl(
+				id = "gradle-run-task",
+				phase = CodePhases.RUN,
+				task = ::runTask,
+			)
+		)
+		registry.add(
+			CodePhaseTaskImpl(
+				id = "gradle-release-task",
+				phase = CodePhases.RELEASE,
+				task = ::releaseTask,
+			)
+		)
+	}
+
+	private fun buildTask(projectContext: ProjectContext): TaskResult {
+		return executeGradleTask(projectContext, "build")
+	}
+
+	private fun testTask(projectContext: ProjectContext): TaskResult {
+		return executeGradleTask(projectContext, "test")
+	}
+
+	private fun runTask(projectContext: ProjectContext): TaskResult {
+		return executeGradleTask(projectContext, "run")
+	}
+
+	private fun releaseTask(projectContext: ProjectContext): TaskResult {
+		return executeGradleTask(projectContext, "publishGprPublicationToGitHubPackagesRepository")
+	}
+
+	private fun executeGradleTask(projectContext: ProjectContext, vararg args: String): TaskResult {
+		println("Executing Gradle task with args: ${args.joinToString(", ")}")
+		val gradleCommand = projectContext.dir.resolve("gradlew")
+		val processBuilder = ProcessBuilder(gradleCommand.toString(), *args)
+			.directory(projectContext.dir.toFile())
+			.inheritIO()
+		val process = processBuilder.start()
+		val exitCode = process.waitFor()
+		return if (exitCode != 0) {
+			TaskResult.Failure("Gradle task failed with exit code $exitCode")
+		} else {
+			TaskResult.Success("Gradle task completed successfully")
+		}
+	}
+}
+
