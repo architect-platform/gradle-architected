@@ -1,12 +1,22 @@
 package io.github.architectplatform.plugins.gradlearchitected
 
-import io.github.architectplatform.api.assets.code.CodePhaseTaskImpl
-import io.github.architectplatform.api.assets.code.CodePhases
+import io.github.architectplatform.api.phase.PhaseTask
 import io.github.architectplatform.api.plugins.ArchitectPlugin
 import io.github.architectplatform.api.project.ProjectContext
 import io.github.architectplatform.api.tasks.TaskRegistry
 import io.github.architectplatform.api.tasks.TaskResult
+import io.github.architectplatform.api.workflows.code.CodeWorkflow
 
+class CodePhaseTaskImpl(
+	override val id: String,
+	override val phase: CodeWorkflow,
+	private val task: (ProjectContext) -> TaskResult,
+) : PhaseTask<CodeWorkflow> {
+
+	override fun execute(ctx: ProjectContext): TaskResult {
+		return task(ctx)
+	}
+}
 
 class GradlePlugin : ArchitectPlugin {
 	override val id = "gradle-plugin"
@@ -15,28 +25,28 @@ class GradlePlugin : ArchitectPlugin {
 		registry.add(
 			CodePhaseTaskImpl(
 				id = "gradle-build-task",
-				phase = CodePhases.BUILD,
+				phase = CodeWorkflow.BUILD,
 				task = ::buildTask,
 			)
 		)
 		registry.add(
 			CodePhaseTaskImpl(
 				id = "gradle-test-task",
-				phase = CodePhases.TEST,
+				phase = CodeWorkflow.TEST,
 				task = ::testTask,
 			)
 		)
 		registry.add(
 			CodePhaseTaskImpl(
 				id = "gradle-run-task",
-				phase = CodePhases.RUN,
+				phase = CodeWorkflow.RUN,
 				task = ::runTask,
 			)
 		)
 		registry.add(
 			CodePhaseTaskImpl(
 				id = "gradle-release-task",
-				phase = CodePhases.RELEASE,
+				phase = CodeWorkflow.RELEASE,
 				task = ::releaseTask,
 			)
 		)
@@ -67,9 +77,9 @@ class GradlePlugin : ArchitectPlugin {
 		val process = processBuilder.start()
 		val exitCode = process.waitFor()
 		return if (exitCode != 0) {
-			TaskResult.Failure("Gradle task failed with exit code $exitCode")
+			TaskResult.failure("Gradle task failed with exit code $exitCode")
 		} else {
-			TaskResult.Success("Gradle task completed successfully")
+			TaskResult.success("Gradle task completed successfully")
 		}
 	}
 }
