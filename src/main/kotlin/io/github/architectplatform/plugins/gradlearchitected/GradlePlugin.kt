@@ -1,50 +1,39 @@
 package io.github.architectplatform.plugins.gradlearchitected
 
-import io.github.architectplatform.api.phase.PhaseTask
+import io.github.architectplatform.api.phase.SimpleTask
 import io.github.architectplatform.api.plugins.ArchitectPlugin
 import io.github.architectplatform.api.project.ProjectContext
 import io.github.architectplatform.api.tasks.TaskRegistry
 import io.github.architectplatform.api.tasks.TaskResult
 import io.github.architectplatform.api.workflows.code.CodeWorkflow
 
-class CodePhaseTaskImpl(
-	override val id: String,
-	override val phase: CodeWorkflow,
-	private val task: (ProjectContext) -> TaskResult,
-) : PhaseTask<CodeWorkflow> {
-
-	override fun execute(ctx: ProjectContext): TaskResult {
-		return task(ctx)
-	}
-}
-
 class GradlePlugin : ArchitectPlugin {
 	override val id = "gradle-plugin"
 	override fun register(registry: TaskRegistry) {
 		println("Registering GradlePlugin with ID: $id")
 		registry.add(
-			CodePhaseTaskImpl(
+			SimpleTask(
 				id = "gradle-build-task",
 				phase = CodeWorkflow.BUILD,
 				task = ::buildTask,
 			)
 		)
 		registry.add(
-			CodePhaseTaskImpl(
+			SimpleTask(
 				id = "gradle-test-task",
 				phase = CodeWorkflow.TEST,
 				task = ::testTask,
 			)
 		)
 		registry.add(
-			CodePhaseTaskImpl(
+			SimpleTask(
 				id = "gradle-run-task",
 				phase = CodeWorkflow.RUN,
 				task = ::runTask,
 			)
 		)
 		registry.add(
-			CodePhaseTaskImpl(
+			SimpleTask(
 				id = "gradle-release-task",
 				phase = CodeWorkflow.RELEASE,
 				task = ::releaseTask,
