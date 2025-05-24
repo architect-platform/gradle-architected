@@ -6,10 +6,10 @@
 
 set -e
 
-OWNER="{{owner}}"
-NAME="{{name}}"
-ASSET_TYPE="{{assetType}}"
-APPLICATION_NAME="{{applicationName}}"
+OWNER="architect-platform"
+NAME="architect-engine"
+ASSET_TYPE="jar"
+APPLICATION_NAME="architect-engine"
 
 ASSET_NAME="$NAME.$ASSET_TYPE"
 INSTALL_DIR="$HOME/.$NAME"
