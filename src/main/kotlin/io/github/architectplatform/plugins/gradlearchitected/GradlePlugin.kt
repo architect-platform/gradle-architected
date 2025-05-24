@@ -7,8 +7,15 @@ import io.github.architectplatform.api.tasks.TaskRegistry
 import io.github.architectplatform.api.tasks.TaskResult
 import io.github.architectplatform.api.workflows.code.CodeWorkflow
 
-class GradlePlugin : ArchitectPlugin {
+
+class GradlePlugin : ArchitectPlugin<Map<String, String>> {
 	override val id = "gradle-plugin"
+	override val contextKey: String = "gradle"
+
+	@Suppress("UNCHECKED_CAST")
+	override val ctxClass: Class<Map<String, String>> = Map::class.java as Class<Map<String, String>>
+	override lateinit var context: Map<String, String>
+
 	override fun register(registry: TaskRegistry) {
 		println("Registering GradlePlugin with ID: $id")
 		registry.add(

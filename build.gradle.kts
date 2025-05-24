@@ -32,7 +32,7 @@ repositories {
 }
 
 dependencies {
-	implementation("io.github.architectplatform:architect-api:1.8.0")
+	implementation("io.github.architectplatform:architect-api:1.10.0")
 }
 
 publishing {
