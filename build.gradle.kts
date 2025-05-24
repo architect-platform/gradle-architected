@@ -6,8 +6,6 @@ group = "io.github.architectplatform.plugins"
 version = "1.6.1"
 
 java {
-	withSourcesJar()
-	withJavadocJar()
 	sourceCompatibility = JavaVersion.toVersion("17")
 }
 
