@@ -1,11 +1,11 @@
 package io.github.architectplatform.plugins.gradlearchitected
 
-import io.github.architectplatform.api.plugins.ArchitectPlugin
-import io.github.architectplatform.api.project.ProjectContext
-import io.github.architectplatform.api.tasks.TaskRegistry
-import io.github.architectplatform.api.tasks.TaskResult
-import io.github.architectplatform.api.tasks.impl.SimpleTask
-import io.github.architectplatform.api.workflows.code.CodeWorkflow
+import io.github.architectplatform.api.components.workflows.code.CodeWorkflow
+import io.github.architectplatform.api.core.plugins.ArchitectPlugin
+import io.github.architectplatform.api.core.project.ProjectContext
+import io.github.architectplatform.api.core.tasks.TaskRegistry
+import io.github.architectplatform.api.core.tasks.TaskResult
+import io.github.architectplatform.api.core.tasks.impl.SimpleTask
 
 
 class GradlePlugin : ArchitectPlugin<Map<String, String>> {
@@ -42,8 +42,8 @@ class GradlePlugin : ArchitectPlugin<Map<String, String>> {
 		registry.add(
 			SimpleTask(
 				id = "gradle-release-task",
-				phase = CodeWorkflow.RELEASE,
-				task = ::releaseTask,
+				phase = CodeWorkflow.PUBLISH,
+				task = ::publishTask,
 			)
 		)
 	}
@@ -60,7 +60,7 @@ class GradlePlugin : ArchitectPlugin<Map<String, String>> {
 		return executeGradleTask(projectContext, "run")
 	}
 
-	private fun releaseTask(projectContext: ProjectContext): TaskResult {
+	private fun publishTask(projectContext: ProjectContext): TaskResult {
 		return executeGradleTask(projectContext, "publishGprPublicationToGitHubPackagesRepository")
 	}
 
