@@ -1,4 +1,0 @@
-echo "Running pre-push hook..."
-architect pre-push "$@"
-
-
