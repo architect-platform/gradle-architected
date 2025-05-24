@@ -3,7 +3,7 @@ plugins {
 	`maven-publish`
 }
 group = "io.github.architectplatform.plugins"
-version = "1.6.3"
+version = "1.6.4"
 
 java {
 	sourceCompatibility = JavaVersion.toVersion("17")
