@@ -1,10 +1,10 @@
 package io.github.architectplatform.plugins.gradlearchitected
 
-import io.github.architectplatform.api.phase.SimpleTask
 import io.github.architectplatform.api.plugins.ArchitectPlugin
 import io.github.architectplatform.api.project.ProjectContext
 import io.github.architectplatform.api.tasks.TaskRegistry
 import io.github.architectplatform.api.tasks.TaskResult
+import io.github.architectplatform.api.tasks.impl.SimpleTask
 import io.github.architectplatform.api.workflows.code.CodeWorkflow
 
 
