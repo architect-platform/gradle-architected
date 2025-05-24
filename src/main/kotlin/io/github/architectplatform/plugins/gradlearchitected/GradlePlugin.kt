@@ -14,7 +14,7 @@ class GradlePlugin : ArchitectPlugin<Map<String, String>> {
 
 	@Suppress("UNCHECKED_CAST")
 	override val ctxClass: Class<Map<String, String>> = Map::class.java as Class<Map<String, String>>
-	override lateinit var context: Map<String, String>
+	override var context: Map<String, String> = emptyMap()
 
 	override fun register(registry: TaskRegistry) {
 		println("Registering GradlePlugin with ID: $id")
