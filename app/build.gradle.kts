@@ -1,6 +1,5 @@
 plugins {
 	kotlin("jvm") version "1.9.25"
-	`maven-publish`
 }
 group = "io.github.architectplatform.plugins"
 version = "1.7.1"
@@ -17,6 +16,15 @@ kotlin {
 
 repositories {
 	mavenCentral()
+	maven {
+		name = "GitHubPackages"
+		url = uri("https://maven.pkg.github.com/architect-platform/architect-api")
+		credentials {
+			username = System.getenv("GITHUB_USER") ?: project.findProperty("githubUser") as String? ?: "github-actions"
+			password = System.getenv("REGISTRY_TOKEN") ?: System.getenv("GITHUB_TOKEN")
+					?: project.findProperty("githubToken") as String?
+		}
+	}
 }
 
 dependencies {
