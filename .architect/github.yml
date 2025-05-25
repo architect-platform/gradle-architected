@@ -9,4 +9,4 @@ github:
   release:
     assets:
       - name: gradle-architected.jar
-        path: "build/libs/gradle-architected-*.jar"
+        path: "app/build/libs/gradle-architected-*.jar"
