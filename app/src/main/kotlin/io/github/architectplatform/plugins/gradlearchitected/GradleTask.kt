@@ -1,6 +1,7 @@
 package io.github.architectplatform.plugins.gradlearchitected
 
 import io.github.architectplatform.api.core.project.ProjectContext
+import io.github.architectplatform.api.core.tasks.Environment
 import io.github.architectplatform.api.core.tasks.Task
 import io.github.architectplatform.api.core.tasks.TaskResult
 import io.github.architectplatform.api.core.tasks.phase.Phase
@@ -15,8 +16,8 @@ class GradleTask(
 	override val id: String = "gradle-$command"
 	override fun phase(): Phase = phase
 
-	override fun execute(ctx: ProjectContext, args: List<String>): TaskResult {
-		val results = context.projects.map { singleProjectTask(ctx, args, it)}
+	override fun execute(environment: Environment, projectContext: ProjectContext, args: List<String>): TaskResult {
+		val results = this.context.projects.map { singleProjectTask(projectContext, args, it)}
 		return TaskResult.success("Gradle task: $id completed successfully", results)
 	}
 
