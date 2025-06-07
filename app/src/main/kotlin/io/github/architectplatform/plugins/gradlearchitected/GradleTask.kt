@@ -32,12 +32,9 @@ class GradleTask(
       gradleProjectContext: GradleProjectContext
   ): TaskResult {
     if (!isEnabled(gradleProjectContext)) {
-      println("Gradle task: $id not enabled on gradle project: $gradleProjectContext. Skipping...")
       return TaskResult.success(
           "Gradle task: $id not enabled on gradle project: $gradleProjectContext. Skipping...")
     }
-    println(
-        "Executing Gradle task: $id with args: ${args.joinToString(", ")} over gradle project: $gradleProjectContext")
     val gradleProjectDir =
         Path(projectContext.dir.toString(), gradleProjectContext.path).toAbsolutePath()
     val gradleCommand = gradleProjectDir.resolve(gradleProjectContext.gradlePath)
