@@ -1,5 +1,6 @@
 package io.github.architectplatform.plugins.gradlearchitected
 
+import io.github.architectplatform.api.components.execution.CommandExecutor
 import io.github.architectplatform.api.core.project.ProjectContext
 import io.github.architectplatform.api.core.tasks.Environment
 import io.github.architectplatform.api.core.tasks.Task
@@ -22,11 +23,13 @@ class GradleTask(
       projectContext: ProjectContext,
       args: List<String>
   ): TaskResult {
-    val results = this.context.projects.map { singleProjectTask(projectContext, args, it) }
+    val results =
+        this.context.projects.map { singleProjectTask(environment, projectContext, args, it) }
     return TaskResult.success("Gradle task: $id completed successfully", results)
   }
 
   private fun singleProjectTask(
+      environment: Environment,
       projectContext: ProjectContext,
       args: List<String>,
       gradleProjectContext: GradleProjectContext
@@ -35,21 +38,20 @@ class GradleTask(
       return TaskResult.success(
           "Gradle task: $id not enabled on gradle project: $gradleProjectContext. Skipping...")
     }
+    val commandExecutor = environment.service(CommandExecutor::class.java)
     val gradleProjectDir =
         Path(projectContext.dir.toString(), gradleProjectContext.path).toAbsolutePath()
-    val gradleCommand = gradleProjectDir.resolve(gradleProjectContext.gradlePath)
-    val processBuilder =
-        ProcessBuilder(gradleCommand.toString(), command, *args.toTypedArray())
-            .directory(gradleProjectDir.toFile())
-            .inheritIO()
-    val process = processBuilder.start()
-    val exitCode = process.waitFor()
-    return if (exitCode != 0) {
-      TaskResult.failure(
-          "Gradle task: $id over gradle project: $gradleProjectContext failed with exit code $exitCode")
-    } else {
-      TaskResult.success(
-          "Gradle task: $id over gradle project: $gradleProjectContext completed successfully")
+
+    try {
+      commandExecutor.execute(
+          "${gradleProjectContext.gradlePath} $command ${args.joinToString(" ")}",
+          workingDir = gradleProjectDir.toString())
+    } catch (e: Exception) {
+      return TaskResult.failure(
+          "Gradle task: $id over gradle project: $gradleProjectContext failed with exception: ${e.message}")
     }
+
+    return TaskResult.success(
+        "Gradle task: $id over gradle project: $gradleProjectContext completed successfully")
   }
 }
