@@ -26,4 +26,4 @@ repositories {
   }
 }
 
-dependencies { implementation("io.github.architectplatform:architect-api:1.16.0") }
+dependencies { implementation("io.github.architectplatform:architect-api:2.0.0") }
