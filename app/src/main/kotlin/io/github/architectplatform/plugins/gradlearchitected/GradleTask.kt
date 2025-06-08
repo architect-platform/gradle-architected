@@ -25,7 +25,12 @@ class GradleTask(
   ): TaskResult {
     val results =
         this.context.projects.map { singleProjectTask(environment, projectContext, args, it) }
-    return TaskResult.success("Gradle task: $id completed successfully", results)
+    val success = results.all { it.success }
+    if (!success) {
+      return TaskResult.failure("Gradle task: $id failed for some projects", results = results)
+    }
+    return TaskResult.success(
+        "Gradle task: $id executed successfully for all projects", results = results)
   }
 
   private fun singleProjectTask(
