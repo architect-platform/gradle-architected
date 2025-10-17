@@ -11,7 +11,7 @@ class GradlePlugin : ArchitectPlugin<GradleContext> {
   override var context: GradleContext = GradleContext()
 
   override fun register(registry: TaskRegistry) {
-    registry.add(GradleTask("", CodeWorkflow.INIT, context))
+    registry.add(GradleTask("init", CodeWorkflow.INIT, context))
     registry.add(GradleTask("build", CodeWorkflow.BUILD, context))
     registry.add(GradleTask("test", CodeWorkflow.TEST, context))
     registry.add(GradleTask("run", CodeWorkflow.RUN, context))
